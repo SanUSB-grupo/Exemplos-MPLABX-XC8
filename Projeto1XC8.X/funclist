@@ -1,0 +1,11 @@
+_Delay1KTCYx: CODE, 31782 0 18
+___awmod: CODE, 32266 0 156
+_main: CODE, 31828 0 34
+_clock_int_4MHz: CODE, 32158 0 108
+_inverte_saida: CODE, 32422 0 346
+__initialization: CODE, 31862 0 34
+_le_eeprom: CODE, 31800 0 28
+___lwdiv: CODE, 31968 0 86
+_tempo_ms: CODE, 31906 0 62
+_interrupcao: CODE, 4104 0 28054
+Total: 28926

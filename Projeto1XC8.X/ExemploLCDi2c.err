@@ -1,0 +1,12 @@
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 44 : suspicious pointer conversion
+Warning[2066] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 44 : type qualifier mismatch in assignment
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 45 : suspicious pointer conversion
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 48 : suspicious pointer conversion
+Warning[2066] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 48 : type qualifier mismatch in assignment
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 49 : suspicious pointer conversion
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 50 : suspicious pointer conversion
+Warning[2066] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 50 : type qualifier mismatch in assignment
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 51 : suspicious pointer conversion
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 52 : suspicious pointer conversion
+Warning[2066] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 52 : type qualifier mismatch in assignment
+Warning[2054] C:\Users\Sandro\Dropbox\Public\ProjSanUSB1_MPLABX\Projeto1C18.X\ExemploLCDi2c.c 53 : suspicious pointer conversion

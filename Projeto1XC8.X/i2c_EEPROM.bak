@@ -1,0 +1,61 @@
+#include "SanUSB1.h" // Firmware para configuração e leitura por hardware 
+#include"i2c_usb.h"//Biblioteca de funcoes I2C com a placa SanUSB. RB0(SDA) e RB1(SCL)
+
+unsigned int i,j,endereco=0, posicao=0, valorgravado;
+unsigned long int tensao_lida32, resultado; //Varia de 0 a 5000mV (16bits), mas é int32 porque o cálculo intermediário ultrapassa 65536
+unsigned char byte1,byte2,byte3,byte4; // 4 Partes do valor int32 tensao_lida32
+
+#pragma interrupt interrupcao
+void interrupcao(){}
+
+unsigned char conv_dec_4bytes(long int valor32) //Função auxiliar que converte decimal de 32 bits em 4 bytes
+{
+    long int resultado1=0,resultado2=0;
+    resultado1 = valor32/256; byte1 = valor32%256; //o que for resto (%) é menos significativo
+    resultado2 = resultado1/256; byte2= resultado1%256;
+    byte3= resultado2%256; byte4 = resultado2/256;
+    return(byte4,byte3,byte2,byte1);
+}
+
+
+
+unsigned long int dez, un, resultado, Vresult;
+
+void main(){
+    clock_int_4MHz();
+    habilita_canal_AD(AN0);
+
+    while(1){
+   nivel_alto(pin_b7);
+   resultado = le_AD10bits(0);
+   Vresult = (resultado * 5000)/1023;//Calcula a tensão Trimpot em mV: 5000mV - 1023 (10bis)
+   tempo_ms(500);
+   nivel_baixo(pin_b7);
+   tempo_ms(500);
+   //sendrw((rom char *)"tensao do Trimpot =");
+   //sendnum(tensao_lida32); sendrw((rom char *)"\r\n");
+//*
+   conv_dec_4bytes(Vresult);
+   posicao=2*endereco; //endereço é o ponteiro de 16 bits (byte 1 e byte 2)
+
+   escreve_ieeprom( posicao, byte2); //segundo Byte menos significativo do int32
+   tempo_ms(100);
+   escreve_ieeprom( posicao+1, byte1 ); //Byte menos significativo do int32
+   //escreve_eeprom( posicao, byte2); //segundo Byte menos significativo do int32 //EEPROM interna
+   //escreve_eeprom( posicao+1, byte1 ); //Byte menos significativo do int32
+
+   ++endereco; if (endereco>=100){endereco=0;} //Buffer de 300 bytes posicao<300
+
+   if(entrada_pin_e3==0){
+      sendrw((rom char *)"nEEPROM:\r\n");
+      for(i=0; i<10; ++i) { //MOstra 100 Valores de 16 bits armazenados 200 bytes de 8 bits.
+      for(j=0; j<10; ++j) {
+      valorgravado= 256*le_ieeprom((i*20)+2*j) + le_ieeprom((i*20)+2*j+1);
+      //valorgravado= 256*le_eeprom((i*20)+2*j) + le_eeprom((i*20)+2*j+1);//EEPROM interna
+      sendnum(valorgravado);
+                          }
+     sendrw((rom char *)"\n\r");
+                        }}//*/
+
+     }
+}
