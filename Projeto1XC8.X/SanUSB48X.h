@@ -1,15 +1,16 @@
 #ifndef SANUSB_H
 #define SANUSB_H
-
+#define _XTAL_FREQ  48000000
+//Testado nas versões 1.31 e 1.38 do XC8, bem como nas IDEs MPLABX 2 e 3.
+#include <xc.h>
 #include<p18f4550.h>
 #include <stdio.h>
-#include <plib/delays.h>
-#include <plib/adc.h>
-#include <plib/usart.h>
+//#include <plib/delays.h>
+//#include <plib/adc.h>
+//#include <plib/usart.h>
 #include <string.h>
 
 //void interrupcao(void);
-
 
 // Declaração externa para funções assembly -------
 //extern void tempo_us(unsigned char);
@@ -188,10 +189,19 @@ void portaC_entrada(void) {
 #define pin_c7  31767
 #define portc   3970 // 0xf82 = 3970 * 8 = 31760
 
+#define pin_d0  31768
+#define pin_d1  31769
+#define pin_d2  31770
+#define pin_d3  31771
+#define pin_d4  31772
+#define pin_d5  31773
+#define pin_d6  31774
+#define pin_d7  31775
+#define portd   3971 // 0xf83 = 3971 * 8 = 31768
+
 
 #define pin_e3 31779 // port_e = 0xf84 = 3972 * 8 = 31776 +3 = 31779
 
-#define pin_d7 31775 // port_e = 0xf84 = 3971 * 8 = 31768 +7 = 31775
 
 void habilita_wdt(void) {
     WDTCONbits.SWDTEN = 1;
@@ -201,308 +211,162 @@ void limpaflag_wdt(void) {
     ClrWdt();
 }
 
-void nivel_alto(unsigned int pino) {//INTCON2bits.RBPU=0;  //Pull-ups habilitados na porta b
+void nivel_alto(unsigned int pino)
+{//INTCON2bits.RBPU=0;  //Pull-ups habilitados na porta b
 
-    switch (pino) {
+switch(pino){
 
-        case 31744: TRISAbits.TRISA0 = 0;
-            PORTAbits.RA0 = 1;
-            break;
-        case 31745: TRISAbits.TRISA1 = 0;
-            PORTAbits.RA1 = 1;
-            break;
-        case 31746: TRISAbits.TRISA2 = 0;
-            PORTAbits.RA2 = 1;
-            break;
-        case 31747: TRISAbits.TRISA3 = 0;
-            PORTAbits.RA3 = 1;
-            break;
-        case 31748: TRISAbits.TRISA4 = 0;
-            PORTAbits.RA4 = 1;
-            break;
-        case 31749: TRISAbits.TRISA5 = 0;
-            PORTAbits.RA5 = 1;
-            break;
-        case 3968: TRISA = 0b00000000;
-            LATA = 0b11111111;
-            break; //Aciona todos
+    case 31744: TRISAbits.TRISA0 = 0; PORTAbits.RA0 = 1; break;
+    case 31745: TRISAbits.TRISA1 = 0; PORTAbits.RA1 = 1; break;
+    case 31746: TRISAbits.TRISA2 = 0; PORTAbits.RA2 = 1; break;
+    case 31747: TRISAbits.TRISA3 = 0; PORTAbits.RA3 = 1; break;
+    case 31748: TRISAbits.TRISA4 = 0; PORTAbits.RA4 = 1; break;
+    case 31749: TRISAbits.TRISA5 = 0; PORTAbits.RA5 = 1; break;
+    case 3968: TRISA = 0b00000000;  LATA = 0b11111111;  break;//Aciona todos
 
-        case 31752: TRISBbits.TRISB0 = 0;
-            PORTBbits.RB0 = 1;
-            break; //Tris define entrada(1) ou saída(0)
-        case 31753: TRISBbits.TRISB1 = 0;
-            PORTBbits.RB1 = 1;
-            break;
-        case 31754: TRISBbits.TRISB2 = 0;
-            PORTBbits.RB2 = 1;
-            break;
-        case 31755: TRISBbits.TRISB3 = 0;
-            PORTBbits.RB3 = 1;
-            break;
-        case 31756: TRISBbits.TRISB4 = 0;
-            PORTBbits.RB4 = 1;
-            break;
-        case 31757: TRISBbits.TRISB5 = 0;
-            PORTBbits.RB5 = 1;
-            break;
-        case 31758: TRISBbits.TRISB6 = 0;
-            PORTBbits.RB6 = 1;
-            break;
-        case 31759: TRISBbits.TRISB7 = 0;
-            PORTBbits.RB7 = 1;
-            break;
-        case 3969: TRISB = 0b00000000;
-            LATB = 0b11111111;
-            break; //Aciona todos, TRIS saída(0) e LAT o valor dos pinos
+    case 31752: TRISBbits.TRISB0 = 0; PORTBbits.RB0 = 1; break;//Tris define entrada(1) ou saída(0)
+    case 31753: TRISBbits.TRISB1 = 0; PORTBbits.RB1 = 1; break;
+    case 31754: TRISBbits.TRISB2 = 0; PORTBbits.RB2 = 1; break;
+    case 31755: TRISBbits.TRISB3 = 0; PORTBbits.RB3 = 1; break;
+    case 31756: TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 1; break;
+    case 31757: TRISBbits.TRISB5 = 0; PORTBbits.RB5 = 1; break;
+    case 31758: TRISBbits.TRISB6 = 0; PORTBbits.RB6 = 1; break;
+    case 31759: TRISBbits.TRISB7 = 0; PORTBbits.RB7 = 1; break;
+    case 3969: TRISB = 0b00000000;  LATB = 0b11111111;  break; //Aciona todos, TRIS saída(0) e LAT o valor dos pinos
 
-        case 31760: TRISCbits.TRISC0 = 0;
-            PORTCbits.RC0 = 1;
-            break;
-        case 31761: TRISCbits.TRISC1 = 0;
-            PORTCbits.RC1 = 1;
-            break;
-        case 31762: TRISCbits.TRISC2 = 0;
-            PORTCbits.RC2 = 1;
-            break;
-        case 31766: TRISCbits.TRISC6 = 0;
-            PORTCbits.RC6 = 1;
-            break;
-        case 31767: TRISCbits.TRISC7 = 0;
-            PORTCbits.RC7 = 1;
-            break;
-        case 3970: TRISC = 0b00000000;
-            LATC = 0b11111111;
-            break; //Aciona todos
-    }
-}
+    case 31760: TRISCbits.TRISC0 = 0; PORTCbits.RC0 = 1; break;
+    case 31761: TRISCbits.TRISC1 = 0; PORTCbits.RC1 = 1; break;
+    case 31762: TRISCbits.TRISC2 = 0; PORTCbits.RC2 = 1; break;
+    case 31766: TRISCbits.TRISC6 = 0; PORTCbits.RC6 = 1; break;
+    case 31767: TRISCbits.TRISC7 = 0; PORTCbits.RC7 = 1; break;
+    case 3970: TRISC = 0b00000000;  LATC = 0b11111111;  break;//Aciona todos
 
-void nivel_baixo(unsigned int pino) {//INTCON2bits.RBPU=1; //Pull-ups desabilitados
-    switch (pino) {
+    case 31768: TRISDbits.TRISD0 = 0; PORTDbits.RD0 = 1; break;//Tris define entrada(1) ou saída(0)
+    case 31769: TRISDbits.TRISD1 = 0; PORTDbits.RD1 = 1; break;
+    case 31770: TRISDbits.TRISD2 = 0; PORTDbits.RD2 = 1; break;
+    case 31771: TRISDbits.TRISD3 = 0; PORTDbits.RD3 = 1; break;
+    case 31772: TRISDbits.TRISD4 = 0; PORTDbits.RD4 = 1; break;
+    case 31773: TRISDbits.TRISD5 = 0; PORTDbits.RD5 = 1; break;
+    case 31774: TRISDbits.TRISD6 = 0; PORTDbits.RD6 = 1; break;
+    case 31775: TRISDbits.TRISD7 = 0; PORTDbits.RD7 = 1; break;
+                           }}
+void nivel_baixo(unsigned int pino)
+{//INTCON2bits.RBPU=1; //Pull-ups desabilitados
+switch(pino){
 
-        case 31744: TRISAbits.TRISA0 = 0;
-            PORTAbits.RA0 = 0;
-            break;
-        case 31745: TRISAbits.TRISA1 = 0;
-            PORTAbits.RA1 = 0;
-            break;
-        case 31746: TRISAbits.TRISA2 = 0;
-            PORTAbits.RA2 = 0;
-            break;
-        case 31747: TRISAbits.TRISA3 = 0;
-            PORTAbits.RA3 = 0;
-            break;
-        case 31748: TRISAbits.TRISA4 = 0;
-            PORTAbits.RA4 = 0;
-            break;
-        case 31749: TRISAbits.TRISA5 = 0;
-            PORTAbits.RA5 = 0;
-            break;
-        case 3968: TRISA = 0b00000000;
-            LATA = 0b00000000;
-            break; //Aciona todos
+    case 31744: TRISAbits.TRISA0 = 0; PORTAbits.RA0 = 0; break;
+    case 31745: TRISAbits.TRISA1 = 0; PORTAbits.RA1 = 0; break;
+    case 31746: TRISAbits.TRISA2 = 0; PORTAbits.RA2 = 0; break;
+    case 31747: TRISAbits.TRISA3 = 0; PORTAbits.RA3 = 0; break;
+    case 31748: TRISAbits.TRISA4 = 0; PORTAbits.RA4 = 0; break;
+    case 31749: TRISAbits.TRISA5 = 0; PORTAbits.RA5 = 0; break;
+    case 3968: TRISA = 0b00000000;  LATA = 0b00000000;  break;//Aciona todos
 
-        case 31752: TRISBbits.TRISB0 = 0;
-            PORTBbits.RB0 = 0;
-            break; //Tris define entrada(1) ou saída(0)
-        case 31753: TRISBbits.TRISB1 = 0;
-            PORTBbits.RB1 = 0;
-            break;
-        case 31754: TRISBbits.TRISB2 = 0;
-            PORTBbits.RB2 = 0;
-            break;
-        case 31755: TRISBbits.TRISB3 = 0;
-            PORTBbits.RB3 = 0;
-            break;
-        case 31756: TRISBbits.TRISB4 = 0;
-            PORTBbits.RB4 = 0;
-            break;
-        case 31757: TRISBbits.TRISB5 = 0;
-            PORTBbits.RB5 = 0;
-            break;
-        case 31758: TRISBbits.TRISB6 = 0;
-            PORTBbits.RB6 = 0;
-            break;
-        case 31759: TRISBbits.TRISB7 = 0;
-            PORTBbits.RB7 = 0;
-            break;
-        case 3969: TRISB = 0b00000000;
-            LATB = 0b00000000;
-            break; //Aciona todos, TRIS saída(0) e LAT o valor dos pinos
+    case 31752: TRISBbits.TRISB0 = 0; PORTBbits.RB0 = 0; break;//Tris define entrada(1) ou saída(0)
+    case 31753: TRISBbits.TRISB1 = 0; PORTBbits.RB1 = 0; break;
+    case 31754: TRISBbits.TRISB2 = 0; PORTBbits.RB2 = 0; break;
+    case 31755: TRISBbits.TRISB3 = 0; PORTBbits.RB3 = 0; break;
+    case 31756: TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 0; break;
+    case 31757: TRISBbits.TRISB5 = 0; PORTBbits.RB5 = 0; break;
+    case 31758: TRISBbits.TRISB6 = 0; PORTBbits.RB6 = 0; break;
+    case 31759: TRISBbits.TRISB7 = 0; PORTBbits.RB7 = 0; break;
+    case 3969: TRISB = 0b00000000;  LATB = 0b00000000;  break; //Aciona todos, TRIS saída(0) e LAT o valor dos pinos
 
-        case 31760: TRISCbits.TRISC0 = 0;
-            PORTCbits.RC0 = 0;
-            break;
-        case 31761: TRISCbits.TRISC1 = 0;
-            PORTCbits.RC1 = 0;
-            break;
-        case 31762: TRISCbits.TRISC2 = 0;
-            PORTCbits.RC2 = 0;
-            break;
-        case 31766: TRISCbits.TRISC6 = 0;
-            PORTCbits.RC6 = 0;
-            break;
-        case 31767: TRISCbits.TRISC7 = 0;
-            PORTCbits.RC7 = 0;
-            break;
-        case 3970: TRISC = 0b00000000;
-            LATC = 0b00000000;
-            break; //Aciona todos
-    }
-}
+    case 31760: TRISCbits.TRISC0 = 0; PORTCbits.RC0 = 0; break;
+    case 31761: TRISCbits.TRISC1 = 0; PORTCbits.RC1 = 0; break;
+    case 31762: TRISCbits.TRISC2 = 0; PORTCbits.RC2 = 0; break;
+    case 31766: TRISCbits.TRISC6 = 0; PORTCbits.RC6 = 0; break;
+    case 31767: TRISCbits.TRISC7 = 0; PORTCbits.RC7 = 0; break;
+    case 3970: TRISC = 0b00000000;  LATC = 0b00000000;  break;//Aciona todos
 
-void inverte_saida(unsigned int pino) {
-    switch (pino) {
-        case 31744: TRISAbits.TRISA0 = 0;
-            PORTAbits.RA0 = ~PORTAbits.RA0;
-            break;
-        case 31745: TRISAbits.TRISA1 = 0;
-            PORTAbits.RA1 = ~PORTAbits.RA1;
-            break;
-        case 31746: TRISAbits.TRISA2 = 0;
-            PORTAbits.RA2 = ~PORTAbits.RA2;
-            break;
-        case 31747: TRISAbits.TRISA3 = 0;
-            PORTAbits.RA3 = ~PORTAbits.RA3;
-            break;
-        case 31748: TRISAbits.TRISA4 = 0;
-            PORTAbits.RA4 = ~PORTAbits.RA4;
-            break;
-        case 31749: TRISAbits.TRISA5 = 0;
-            PORTAbits.RA5 = ~PORTAbits.RA5;
-            break;
+    case 31768: TRISDbits.TRISD0 = 0; PORTDbits.RD0 = 0; break;//Tris define entrada(1) ou saída(0)
+    case 31769: TRISDbits.TRISD1 = 0; PORTDbits.RD1 = 0; break;
+    case 31770: TRISDbits.TRISD2 = 0; PORTDbits.RD2 = 0; break;
+    case 31771: TRISDbits.TRISD3 = 0; PORTDbits.RD3 = 0; break;
+    case 31772: TRISDbits.TRISD4 = 0; PORTDbits.RD4 = 0; break;
+    case 31773: TRISDbits.TRISD5 = 0; PORTDbits.RD5 = 0; break;
+    case 31774: TRISDbits.TRISD6 = 0; PORTDbits.RD6 = 0; break;
+    case 31775: TRISDbits.TRISD7 = 0; PORTDbits.RD7 = 0; break;
+                                                      }}
+void inverte_saida(unsigned int pino)
+{
+switch(pino){
+    case 31744: TRISAbits.TRISA0 = 0; PORTAbits.RA0 =~ PORTAbits.RA0; break;
+    case 31745: TRISAbits.TRISA1 = 0; PORTAbits.RA1 =~ PORTAbits.RA1; break;
+    case 31746: TRISAbits.TRISA2 = 0; PORTAbits.RA2 =~ PORTAbits.RA2; break;
+    case 31747: TRISAbits.TRISA3 = 0; PORTAbits.RA3 =~ PORTAbits.RA3; break;
+    case 31748: TRISAbits.TRISA4 = 0; PORTAbits.RA4 =~ PORTAbits.RA4; break;
+    case 31749: TRISAbits.TRISA5 = 0; PORTAbits.RA5 =~ PORTAbits.RA5; break;
 
-        case 31752: TRISBbits.TRISB0 = 0;
-            PORTBbits.RB0 = ~PORTBbits.RB0;
-            break; //Tris define entrada(1) ou saída(0)
-        case 31753: TRISBbits.TRISB1 = 0;
-            PORTBbits.RB1 = ~PORTBbits.RB1;
-            break;
-        case 31754: TRISBbits.TRISB2 = 0;
-            PORTBbits.RB2 = ~PORTBbits.RB2;
-            break;
-        case 31755: TRISBbits.TRISB3 = 0;
-            PORTBbits.RB3 = ~PORTBbits.RB3;
-            break;
-        case 31756: TRISBbits.TRISB4 = 0;
-            PORTBbits.RB4 = ~PORTBbits.RB4;
-            break;
-        case 31757: TRISBbits.TRISB5 = 0;
-            PORTBbits.RB5 = ~PORTBbits.RB5;
-            break;
-        case 31758: TRISBbits.TRISB6 = 0;
-            PORTBbits.RB6 = ~PORTBbits.RB6;
-            break;
-        case 31759: TRISBbits.TRISB7 = 0;
-            PORTBbits.RB7 = ~PORTBbits.RB7;
-            break;
+    case 31752: TRISBbits.TRISB0 = 0; PORTBbits.RB0 =~ PORTBbits.RB0; break;//Tris define entrada(1) ou saída(0)
+    case 31753: TRISBbits.TRISB1 = 0; PORTBbits.RB1 =~ PORTBbits.RB1; break;
+    case 31754: TRISBbits.TRISB2 = 0; PORTBbits.RB2 =~ PORTBbits.RB2; break;
+    case 31755: TRISBbits.TRISB3 = 0; PORTBbits.RB3 =~ PORTBbits.RB3; break;
+    case 31756: TRISBbits.TRISB4 = 0; PORTBbits.RB4 =~ PORTBbits.RB4; break;
+    case 31757: TRISBbits.TRISB5 = 0; PORTBbits.RB5 =~ PORTBbits.RB5; break;
+    case 31758: TRISBbits.TRISB6 = 0; PORTBbits.RB6 =~ PORTBbits.RB6; break;
+    case 31759: TRISBbits.TRISB7 = 0; PORTBbits.RB7 =~ PORTBbits.RB7; break;
 
-        case 31760: TRISCbits.TRISC0 = 0;
-            PORTCbits.RC0 = ~PORTCbits.RC0;
-            break;
-        case 31761: TRISCbits.TRISC1 = 0;
-            PORTCbits.RC1 = ~PORTCbits.RC1;
-            break;
-        case 31762: TRISCbits.TRISC2 = 0;
-            PORTCbits.RC2 = ~PORTCbits.RC2;
-            break;
-        case 31766: TRISCbits.TRISC6 = 0;
-            PORTCbits.RC6 = ~PORTCbits.RC6;
-            break;
-        case 31767: TRISCbits.TRISC7 = 0;
-            PORTCbits.RC7 = ~PORTCbits.RC7;
-            break;
+    case 31760: TRISCbits.TRISC0 = 0; PORTCbits.RC0 =~ PORTCbits.RC0; break;
+    case 31761: TRISCbits.TRISC1 = 0; PORTCbits.RC1 =~ PORTCbits.RC1; break;
+    case 31762: TRISCbits.TRISC2 = 0; PORTCbits.RC2 =~ PORTCbits.RC2; break;
+    case 31766: TRISCbits.TRISC6 = 0; PORTCbits.RC6 =~ PORTCbits.RC6; break;
+    case 31767: TRISCbits.TRISC7 = 0; PORTCbits.RC7 =~ PORTCbits.RC7; break;
 
-        case 31775: TRISDbits.TRISD7 = 0;
-            PORTDbits.RD7 = ~PORTDbits.RD7;
-            break;
+    case 31768: TRISDbits.TRISD0 = 0; PORTDbits.RD0 =~ PORTDbits.RD0; break;//Tris define entrada(1) ou saída(0)
+    case 31769: TRISDbits.TRISD1 = 0; PORTDbits.RD1 =~ PORTDbits.RD1; break;
+    case 31770: TRISDbits.TRISD2 = 0; PORTDbits.RD2 =~ PORTDbits.RD2; break;
+    case 31771: TRISDbits.TRISD3 = 0; PORTDbits.RD3 =~ PORTDbits.RD3; break;
+    case 31772: TRISDbits.TRISD4 = 0; PORTDbits.RD4 =~ PORTDbits.RD4; break;
+    case 31773: TRISDbits.TRISD5 = 0; PORTDbits.RD5 =~ PORTDbits.RD5; break;
+    case 31774: TRISDbits.TRISD6 = 0; PORTDbits.RD6 =~ PORTDbits.RD6; break;
+    case 31775: TRISDbits.TRISD7 = 0; PORTDbits.RD7 =~ PORTDbits.RD7; break;
+                        }
+                                                         }
+void saida_pino(unsigned int pino, short int led)
+{
+switch(pino){
+    case 31744: TRISAbits.TRISA0 = 0; PORTAbits.RA0 = led; break;
+    case 31745: TRISAbits.TRISA1 = 0; PORTAbits.RA1 = led; break;
+    case 31746: TRISAbits.TRISA2 = 0; PORTAbits.RA2 = led; break;
+    case 31747: TRISAbits.TRISA3 = 0; PORTAbits.RA3 = led; break;
+    case 31748: TRISAbits.TRISA4 = 0; PORTAbits.RA4 = led; break;
+    case 31749: TRISAbits.TRISA5 = 0; PORTAbits.RA5 = led; break;
 
-    }
-}
+    case 31752: TRISBbits.TRISB0 = 0; PORTBbits.RB0 = led; break;//Tris define entrada(1) ou saída(0)
+    case 31753: TRISBbits.TRISB1 = 0; PORTBbits.RB1 = led; break;
+    case 31754: TRISBbits.TRISB2 = 0; PORTBbits.RB2 = led; break;
+    case 31755: TRISBbits.TRISB3 = 0; PORTBbits.RB3 = led; break;
+    case 31756: TRISBbits.TRISB4 = 0; PORTBbits.RB4 = led; break;
+    case 31757: TRISBbits.TRISB5 = 0; PORTBbits.RB5 = led; break;
+    case 31758: TRISBbits.TRISB6 = 0; PORTBbits.RB6 = led; break;
+    case 31759: TRISBbits.TRISB7 = 0; PORTBbits.RB7 = led; break;
 
-void saida_pino(unsigned int pino, short int led) {
-    switch (pino) {
-        case 31744: TRISAbits.TRISA0 = 0;
-            PORTAbits.RA0 = led;
-            break;
-        case 31745: TRISAbits.TRISA1 = 0;
-            PORTAbits.RA1 = led;
-            break;
-        case 31746: TRISAbits.TRISA2 = 0;
-            PORTAbits.RA2 = led;
-            break;
-        case 31747: TRISAbits.TRISA3 = 0;
-            PORTAbits.RA3 = led;
-            break;
-        case 31748: TRISAbits.TRISA4 = 0;
-            PORTAbits.RA4 = led;
-            break;
-        case 31749: TRISAbits.TRISA5 = 0;
-            PORTAbits.RA5 = led;
-            break;
+    case 31760: TRISCbits.TRISC0 = 0; PORTCbits.RC0 = led; break;
+    case 31761: TRISCbits.TRISC1 = 0; PORTCbits.RC1 = led; break;
+    case 31762: TRISCbits.TRISC2 = 0; PORTCbits.RC2 = led; break;
+    case 31766: TRISCbits.TRISC6 = 0; PORTCbits.RC6 = led; break;
+    case 31767: TRISCbits.TRISC7 = 0; PORTCbits.RC7 = led; break;
 
-        case 31752: TRISBbits.TRISB0 = 0;
-            PORTBbits.RB0 = led;
-            break; //Tris define entrada(1) ou saída(0)
-        case 31753: TRISBbits.TRISB1 = 0;
-            PORTBbits.RB1 = led;
-            break;
-        case 31754: TRISBbits.TRISB2 = 0;
-            PORTBbits.RB2 = led;
-            break;
-        case 31755: TRISBbits.TRISB3 = 0;
-            PORTBbits.RB3 = led;
-            break;
-        case 31756: TRISBbits.TRISB4 = 0;
-            PORTBbits.RB4 = led;
-            break;
-        case 31757: TRISBbits.TRISB5 = 0;
-            PORTBbits.RB5 = led;
-            break;
-        case 31758: TRISBbits.TRISB6 = 0;
-            PORTBbits.RB6 = led;
-            break;
-        case 31759: TRISBbits.TRISB7 = 0;
-            PORTBbits.RB7 = led;
-            break;
-
-        case 31760: TRISCbits.TRISC0 = 0;
-            PORTCbits.RC0 = led;
-            break;
-        case 31761: TRISCbits.TRISC1 = 0;
-            PORTCbits.RC1 = led;
-            break;
-        case 31762: TRISCbits.TRISC2 = 0;
-            PORTCbits.RC2 = led;
-            break;
-        case 31766: TRISCbits.TRISC6 = 0;
-            PORTCbits.RC6 = led;
-            break;
-        case 31767: TRISCbits.TRISC7 = 0;
-            PORTCbits.RC7 = led;
-            break;
-
-    }
-}
+                        }
+                                                         }
 
 void tempo_us(unsigned int i) {
     unsigned int k;
     for (k = 0; k < 12 * i; k++) {
-        Delay1TCY();
+        __delay_us(1);
     } //12*i para 48 MHz
 
 }
 
 void tempo_ms(unsigned int i) {
     unsigned int k;
-    EEADR = REG + 0B11111100 + tmp;
-    EECON1 = REG + EEADR & 0B00001011;
-    while (EEDATA);
     for (k = 0; k < 12 * i; k++) {
-        Delay1KTCYx(1);
+        __delay_ms(1);
     } //12*i para 48 MHz
 }
 
-#define AN0             0x0E
+#define AN0                    0x0E
 #define AN0_a_AN1              0x0D
 #define AN0_a_AN2              0x0C
 #define AN0_a_AN3              0x0B
@@ -595,20 +459,16 @@ void multiplica_timer16bits(char timer, unsigned int multiplica) { //Timer 0,1 o
                 case 4: T0CON = 0B10000001;
                 case 2: T0CON = 0B10000000;
             }
-
-
-
-
-            /*
+            //*
         case 1:
-            switch(multiplica){ T1CON = 0x80;      // TimerOn Modo 16-bits
+            switch(multiplica){ 
                   case 8:  T1CON =0B10110001;
                   case 4:  T1CON =0B10100001;
                   case 2:  T1CON =0B10010001;
                   case 1:  T1CON =0B10000001;
                         }
          case 3:
-            switch(multiplica){ T3CON = 0x80;      // modo 16-bits
+            switch(multiplica){ 
                   case 8:  T3CON =0B10110001;
                   case 4:  T3CON =0B10100001;
                   case 2:  T3CON =0B10010001;
@@ -671,7 +531,6 @@ unsigned char le_eeprom(unsigned char endereco) {
 }
 
 void clock_int_48MHz(void) {
-#define _XTAL_FREQ  48000000
     EEADR = 0B11111101;
     EECON1 = EEADR & 0B00001011;
     while (EEDATA);
